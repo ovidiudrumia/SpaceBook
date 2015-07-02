@@ -91,4 +91,19 @@ public class PersonTest {
         person.sendMessage(notAFriend, message);
     }
 
+    @Test
+    public void getReceivedMessagesByDate_givenPersonWithMessages_thenSortedMessagesReturned() {
+        Person person = new Person("person");
+        Person friend = new Person("friend");
+        person.addFriend(friend);
+        Message message = new Message(person, "message");
+        Message message2 = new Message(person, "message2");
+
+        friend.sendMessage(person, message);
+        friend.sendMessage(person, message2);
+
+        assertThat(person.getReceivedMessagesByDate().get(0)).isEqualTo(message);
+        assertThat(person.getReceivedMessagesByDate().get(1)).isEqualTo(message2);
+    }
+
 }

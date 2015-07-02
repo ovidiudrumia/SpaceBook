@@ -3,6 +3,8 @@ package com.cegeka.spacebook;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Person {
@@ -63,4 +65,16 @@ public class Person {
     public List<Message> getReceivedMessages() {
         return receivedMessages;
     }
+
+    public List<Message> getReceivedMessagesByDate() {
+        Collections.sort(receivedMessages, new Comparator<Message>() {
+            @Override
+            public int compare(Message o1, Message o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+        return receivedMessages;
+    }
+
+
 }
