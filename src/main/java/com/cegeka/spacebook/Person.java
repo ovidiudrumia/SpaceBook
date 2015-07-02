@@ -1,5 +1,7 @@
 package com.cegeka.spacebook;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -67,14 +69,37 @@ public class Person {
     }
 
     public List<Message> getReceivedMessagesByDate() {
-        Collections.sort(receivedMessages, new Comparator<Message>() {
+        Collections.sort(receivedMessages, getMessageDateComparator());
+        return receivedMessages;
+    }
+
+    public List<Message> getReceivedMessagesByDateAndFriend(final Person friend) {
+        List<Message> receivedMessagesDuplicate = new ArrayList<Message>();
+        receivedMessagesDuplicate.addAll(receivedMessages);
+
+        Iterables.removeIf(receivedMessagesDuplicate, filterByFriend(friend));
+        Collections.sort(receivedMessagesDuplicate, getMessageDateComparator());
+        return receivedMessagesDuplicate;
+    }
+
+    private Predicate<Message> filterByFriend(final Person friend) {
+        return new Predicate<Message>() {
+            @Override
+            public boolean apply(Message message) {
+                if(message.getSender().equals(friend)){
+                    return false;
+                }
+                return true;
+            }
+        };
+    }
+
+    private Comparator<Message> getMessageDateComparator() {
+        return new Comparator<Message>() {
             @Override
             public int compare(Message o1, Message o2) {
                 return o1.getDate().compareTo(o2.getDate());
             }
-        });
-        return receivedMessages;
+        };
     }
-
-
 }

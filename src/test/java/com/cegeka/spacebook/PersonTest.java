@@ -106,4 +106,40 @@ public class PersonTest {
         assertThat(person.getReceivedMessagesByDate().get(1)).isEqualTo(message2);
     }
 
+    @Test
+    public void getReceivedMessagesByDateAndFriend_givenPersonWithMessagesFromMultipleFriendsAndFriend_thenSortedMessagesFromFriendReturned() {
+        Person person = new Person("person");
+        Person friend = new Person("friend");
+        Person friend2 = new Person("person2");
+        friend.addFriend(person);
+        friend2.addFriend(person);
+        Message message = new Message(friend, "message");
+        Message message2 = new Message(friend2, "message2");
+        Message message3 = new Message(friend, "message2");
+        friend.sendMessage(person, message);
+        friend2.sendMessage(person, message2);
+        friend.sendMessage(person, message3);
+
+        assertThat(person.getReceivedMessagesByDateAndFriend(friend).get(0)).isEqualTo(message);
+        assertThat(person.getReceivedMessagesByDateAndFriend(friend).get(1)).isEqualTo(message3);
+    }
+
+    @Test
+    public void getReceivedMessagesByDateAndFriend_givenPersonWithMessagesFromMultipleFriendsAndFriend_thenReceivedMessagesUnchanged() {
+        Person person = new Person("person");
+        Person friend = new Person("friend");
+        Person friend2 = new Person("person2");
+        friend.addFriend(person);
+        friend2.addFriend(person);
+        Message message = new Message(friend, "message");
+        Message message2 = new Message(friend2, "message2");
+        Message message3 = new Message(friend, "message2");
+        friend.sendMessage(person, message);
+        friend2.sendMessage(person, message2);
+        friend.sendMessage(person, message3);
+
+        person.getReceivedMessagesByDateAndFriend(friend);
+
+        assertThat(person.getReceivedMessages().size()).isEqualTo(3);
+    }
 }
