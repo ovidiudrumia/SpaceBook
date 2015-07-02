@@ -25,4 +25,25 @@ public class Person {
     public List<Person> getFriends() {
         return friends;
     }
+
+    public void addFriend(Person friend) {
+        if(friend.equals(this)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.friends.add(friend);
+
+        ensureBidirectionalFriendship(friend);
+    }
+
+    private void ensureBidirectionalFriendship(Person friend) {
+        if(friend.hasFriend(this)) {
+            return;
+        }
+        friend.addFriend(this);
+    }
+
+    public boolean hasFriend(Person friend) {
+        return this.friends.contains(friend);
+    }
 }
