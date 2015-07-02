@@ -70,4 +70,25 @@ public class PersonTest {
         person.addFriend(person);
     }
 
+    @Test
+    public void sendMessage_givenFriendAndMessage_thenMessageSent() {
+        Person person = new Person("person");
+        Person friend = new Person("friend");
+        person.addFriend(friend);
+        Message message = new Message(person, "message");
+
+        person.sendMessage(friend, message);
+
+        assertThat(friend.getReceivedMessages().contains(message)).isTrue();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void sendMessage_givenNotAFriendAndMessage_thenIllegalArgumentException() {
+        Person person = new Person("person");
+        Person notAFriend = new Person("notAFriend");
+        Message message = new Message(person, "message");
+
+        person.sendMessage(notAFriend, message);
+    }
+
 }

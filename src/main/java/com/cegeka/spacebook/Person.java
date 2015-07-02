@@ -8,6 +8,7 @@ import java.util.List;
 public class Person {
     private String username;
     private List<Person> friends;
+    private List<Message> receivedMessages;
 
     public Person(String username) {
         if(StringUtils.isBlank(username)) {
@@ -16,6 +17,7 @@ public class Person {
 
         this.username = username;
         this.friends = new ArrayList<Person>();
+        this.receivedMessages = new ArrayList<Message>();
     }
 
     public String getUsername() {
@@ -45,5 +47,20 @@ public class Person {
 
     public boolean hasFriend(Person friend) {
         return this.friends.contains(friend);
+    }
+
+    public void sendMessage(Person friend, Message message) {
+        if(!friend.hasFriend(this)) {
+            throw new IllegalArgumentException();
+        }
+        friend.receive(message);
+    }
+
+    private void receive(Message message) {
+        receivedMessages.add(message);
+    }
+
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
     }
 }
