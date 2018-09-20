@@ -1,4 +1,4 @@
-package com.cegeka.spacebook;
+package com.axp.spacebook;
 
 import org.junit.Test;
 
